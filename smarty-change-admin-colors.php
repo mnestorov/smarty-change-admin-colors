@@ -16,27 +16,61 @@ if (!defined('WPINC')) {
 	die;
 }
 
-function smarty_set_admin_colors() {
-	switch(wp_get_environment_type()) {
-		case 'local': 
-			$admin_color = 'sunrise';
-			break;
-		case 'development': 
-			$admin_color = 'coffee';
-			break;
-		case 'staging': 
-			$admin_color = 'midnight';
-			break;
-		default: 
-			$admin_color = 'modern';
-	}
+if (!function_exists('smarty_custom_admin_bar_message')) {
+    function smarty_custom_admin_bar_message($wp_admin_bar) {
+        $environment = wp_get_environment_type();
+        $message = '';
+        $env_class = '';
 
-	$args = array(
-		'ID' => get_current_user_id(),
-		'admin_color' => $admin_color,
-	);
+        switch ($environment) {
+            case 'local':
+                $message = 'Local';
+                $env_class = 'local-env';
+                break;
+            case 'development':
+                $message = 'Development';
+                $env_class = 'dev-env';
+                break;
+            case 'staging':
+                $message = 'Staging';
+                $env_class = 'staging-env';
+                break;
+            default:
+                $message = 'Production';
+                $env_class = 'prod-env';
+        }
 
-	wp_update_user($args);
+        // Add a new node to the admin bar
+        $args = array(
+            'id'    => 'environment_notice',
+            'title' => '<span class="' . $env_class . '">' . esc_html(strtoupper($message)) . '</span>',
+            'parent' => 'top-secondary'
+        );
+
+        $wp_admin_bar->add_node($args);
+    }
+    add_action('admin_bar_menu', 'smarty_custom_admin_bar_message', 100);
 }
 
-add_action('admin_init', 'smarty_set_admin_colors');
+if (!function_exists('smarty_custom_admin_styles')) {
+    function smarty_custom_admin_styles() { ?>
+        <style type="text/css">
+            .local-env { background-color: #f3993b; } 		/* Orange for Local */
+            .dev-env { background-color: #9fc5e8; } 		/* Blue for Development */
+            .staging-env { background-color: #a296c0; } 	/* Purple for Staging */
+            .prod-env { background-color: #759c64; } 		/* Green for Production */
+
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item > span {
+                color: #ffffff; 
+                font-weight: bold;
+                padding: 9px 15px !important;
+            }
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item,
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item:hover {
+                padding: 0 !important;
+                margin-right: 15px;
+            }
+        </style>
+    <?php }
+    add_action('admin_head', 'smarty_custom_admin_styles');
+}
