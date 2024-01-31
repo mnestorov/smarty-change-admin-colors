@@ -3,9 +3,9 @@
 /**
  * Plugin Name:             SM - Change Admin Colors
  * Plugin URI:              https://smartystudio.net/smarty-change-admin-colors
- * Description:             Change admin colors based on the server (local, dev, staging, production).
+ * Description:             Change admin colors based on the server (local, dev, staging, production) environment.
  * Version:                 1.0.0
- * Author:                  Smarty Studio, Martin Nestorov
+ * Author:                  Smarty Studio | Martin Nestorov
  * Author URI:              https://smartystudio.net
  * License:                 GPL-2.0+
  * License URI:             http://www.gnu.org/licenses/gpl-2.0.txt
@@ -103,4 +103,45 @@ if (!function_exists('smarty_custom_admin_styles')) {
         </style>';
     }
     add_action('admin_head', 'smarty_custom_admin_styles');
+}
+
+if (!function_exists('smarty_custom_admin_styles_frontend')) {
+    function smarty_custom_admin_styles_frontend() {
+        if (!is_admin_bar_showing()) {
+            return;
+        }
+
+        $environment = wp_get_environment_type();
+        $bg_color = '';
+
+        switch ($environment) {
+            case 'local':
+                $bg_color = '#ed800e'; // Orange for Local
+                break;
+            case 'development':
+                $bg_color = '#2271b1'; // Blue for Development
+                break;
+            case 'staging':
+                $bg_color = '#7866a3'; // Purple for Staging
+                break;
+            default:
+                $bg_color = '#5e7d50'; // Green for Production
+        }
+
+        // Add styles to the frontend admin bar
+        echo '<style type="text/css">
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item span,
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item span:hover {
+                color: #ffffff !important;
+                font-weight: bold !important;
+            }
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item,
+            #wp-admin-bar-environment_notice > .ab-item.ab-empty-item:hover {
+                margin: 0 15px;
+                color: #f0f0f1 !important;
+                background-color: ' . $bg_color . ' !important;
+            }
+        </style>';
+    }
+    add_action('wp_head', 'smarty_custom_admin_styles_frontend');
 }
