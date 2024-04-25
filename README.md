@@ -27,7 +27,8 @@ The **SM - Change Admin Colors** plugin offers a dynamic way to change the WordP
 
 ## Usage
 
-After activation, the plugin automatically detects your WordPress environment setting and changes the admin bar color accordingly:
+After activation, the plugin automatically detects your WordPress environment setting and changes the admin bar color accordingly based on `define('WP_ENVIRONMENT_TYPE', 'staging')` constant being set in your **wp-config.php** file.
+
 - **Local**: Orange
 - **Development**: Blue
 - **Staging**: Purple
