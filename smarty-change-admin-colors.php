@@ -16,6 +16,15 @@ if (!defined('WPINC')) {
 }
 
 if (!function_exists('smarty_custom_admin_bar')) {
+    /**
+     * Adds an environment indicator to the WordPress admin bar.
+     *
+     * This function detects the current environment (local, development, staging, or production)
+     * and adds a corresponding indicator to the admin bar, making it easy to identify the environment
+     * while working in the admin area.
+     *
+     * @param WP_Admin_Bar $wp_admin_bar WordPress Admin Bar object.
+     */
     function smarty_custom_admin_bar($wp_admin_bar) {
         $environment = wp_get_environment_type();
         $message = '';
@@ -47,6 +56,12 @@ if (!function_exists('smarty_custom_admin_bar')) {
 }
 
 if (!function_exists('smarty_custom_admin_styles')) {
+    /**
+     * Adds custom styles to the WordPress admin area based on the current environment.
+     *
+     * This function sets the background color of the admin bar and its elements to a specific
+     * color depending on whether the environment is local, development, staging, or production.
+     */
     function smarty_custom_admin_styles() {
         $environment = wp_get_environment_type();
         $bg_color = '';
@@ -105,6 +120,12 @@ if (!function_exists('smarty_custom_admin_styles')) {
 }
 
 if (!function_exists('smarty_custom_admin_styles_frontend')) {
+    /**
+     * Adds custom styles to the frontend WordPress admin bar based on the current environment.
+     *
+     * This function applies the environment-specific styles to the admin bar when displayed
+     * on the frontend of the site, making it easy to visually identify the environment.
+     */
     function smarty_custom_admin_styles_frontend() {
         if (!is_admin_bar_showing()) {
             return;
