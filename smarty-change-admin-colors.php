@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name:  SM - Change Admin Colors
- * Plugin URI:   https://github.com/smartystudio/smarty-change-admin-colors
+ * Plugin URI:   https://github.com/mnestorov/smarty-change-admin-colors
  * Description:  Change admin colors based on the server (local, dev, staging, production) environment.
  * Version:      1.0.0
  * Author:       Smarty Studio | Martin Nestorov
- * Author URI:   https://smartystudio.net
+ * Author URI:   https://github.com/mnestorov
  * License:      GPL-2.0+
  * License URI:  http://www.gnu.org/licenses/gpl-2.0.txt
  */
